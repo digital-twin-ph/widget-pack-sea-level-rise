@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+.venv/
+examples/*/projection-extract.csv
+examples/*/projection-extract-provenance.json
