@@ -1,0 +1,64 @@
+{
+  "schema": "fieldwork/widget-pack/1",
+  "id": "urn:fieldwork:pack:sea-level-rise",
+  "name": "Sea-level rise (IPCC AR6)",
+  "version": "0.1.0",
+  "namespace": "https://digital-twin-ph.github.io/widget-pack-sea-level-rise/ns#",
+  "kind": "declaration-only",
+  "status": "proposed",
+  "summary": "Applies published IPCC AR6 relative sea-level projections to coastal point data. Consumes projections; does not produce them.",
+  "requires": {
+    "host": "fieldwork",
+    "workflowSchema": "fieldwork/workflow/1",
+    "hostCapabilities": [
+      {
+        "capability": "tabular-import",
+        "status": "missing",
+        "note": "A projection is keyed by site, scenario, workflow, year and quantile, with many rows per site. The host imports points, rasters and graphs only, and PortType is a closed union, so this pack cannot be admitted until the host adds a tabular port and importer. See fieldwork docs/experiments/47-sea-level-pack.md."
+      }
+    ],
+    "baseWidgets": [
+      {"widget": "urn:fieldwork:widget:observations", "accepts": ">=0.2.0", "use": "facility and settlement points"},
+      {"widget": "urn:fieldwork:widget:area", "accepts": ">=0.1.0", "use": "coastal study area"},
+      {"widget": "urn:fieldwork:widget:map_output", "accepts": ">=0.8.0", "use": "presentation"},
+      {"widget": "urn:fieldwork:widget:table_output", "accepts": ">=0.3.0", "use": "presentation"},
+      {"widget": "urn:fieldwork:widget:chart_output", "accepts": ">=0.3.0", "use": "presentation"}
+    ]
+  },
+  "stages": {
+    "discovery": {"supplies": false, "status": "excluded", "note": "Out of scope by decision: the practitioner has already obtained the dataset. Which workflow, scenario and dataset family they chose is recorded on import, not chosen here."},
+    "acquisition": {"supplies": false, "status": "excluded", "note": "Impossible in a browser for this data. The tide-gauge sample store alone is 38.42 GB of zarr and the summary files are NetCDF."},
+    "extraction": {"supplies": true, "status": "external", "note": "scripts/extract-projection.py, run outside the application where xarray can read NetCDF. Writes a long-format CSV and a provenance record."},
+    "import": {"supplies": true, "status": "blocked", "note": "slr_extract_import. Blocked on the host tabular port."},
+    "application": {"supplies": true, "status": "proposed", "note": "slr_site_assignment and slr_threshold_comparison. Both are consumers of published projections, never producers."},
+    "presentation": {"supplies": false, "status": "reuses-base", "note": "Map, Table and Chart unchanged."}
+  },
+  "contents": {
+    "vocabulary": ["ontology/sea-level.ttl"],
+    "shapes": ["ontology/shapes/sea-level.ttl"],
+    "rules": [],
+    "widgets": ["widgets/slr_extract_import/0.1.0.json", "widgets/slr_site_assignment/0.1.0.json", "widgets/slr_threshold_comparison/0.1.0.json"],
+    "examples": ["examples/manila-coastal-exposure"]
+  },
+  "runtimeFetching": "none",
+  "dataSources": [
+    {
+      "name": "IPCC AR6 Sea Level Projections",
+      "doi": "10.5281/zenodo.5914709",
+      "version": "20210809",
+      "licence": "CC-BY-4.0",
+      "format": "NetCDF",
+      "requiredCitations": [
+        "Fox-Kemper, B., et al. 2021: Ocean, Cryosphere and Sea Level Change. In Climate Change 2021: The Physical Science Basis. IPCC AR6 WG1, Chapter 9. doi:10.1017/9781009157896.011",
+        "Kopp, R. E., Garner, G. G., et al. 2023. The Framework for Assessing Changes To Sea-Level (FACTS) v1.0. Geoscientific Model Development 16, 7461-7489. doi:10.5194/gmd-16-7461-2023",
+        "Garner, G. G., et al. 2021. IPCC AR6 Sea Level Projections. Version 20210809. doi:10.5281/zenodo.5914709"
+      ]
+    },
+    {
+      "name": "IPCC AR6 projection site list",
+      "source": "https://github.com/Rutgers-ESSP/IPCC-AR6-Sea-Level-Projections/blob/main/location_list.txt",
+      "licence": "CC-BY-4.0",
+      "note": "228 Philippine rows redistributed as examples/manila-coastal-exposure/projection-sites-ph.csv; the published list has 66,190 rows."
+    }
+  ]
+}

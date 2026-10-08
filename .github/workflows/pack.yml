@@ -1,0 +1,29 @@
+name: Pack self-checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+# Pack-side checks only: is this a well-formed pack? Whether it fits a given host version is
+# integration CI's question, and that runs from the host repository.
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install rdflib pyshacl
+      - name: Manifest and namespace discipline
+        run: python scripts/check-pack.py
+      - name: Vocabulary and shapes parse
+        run: |
+          python - <<'PY'
+          import rdflib
+          for f in ['ontology/sea-level.ttl','ontology/shapes/sea-level.ttl']:
+              g=rdflib.Graph(); g.parse(f,format='turtle'); print(f,len(g),'triples')
+          PY
+      - name: Extraction script parses
+        run: python -c "import ast;ast.parse(open('scripts/extract-projection.py').read())"

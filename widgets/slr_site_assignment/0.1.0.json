@@ -1,0 +1,70 @@
+{
+  "schema": "fieldwork/widget-release/1",
+  "id": "urn:fieldwork:pack:sea-level-rise:widget:slr_site_assignment",
+  "nodeType": "slr_site_assignment",
+  "version": "0.1.0",
+  "title": "Assign projection site",
+  "released": "2026-10-08",
+  "implementationStatus": "proposed",
+  "standardization": "pack",
+  "configuration": {
+    "typescriptFile": null,
+    "typescriptType": null,
+    "planClass": "http://www.w3.org/ns/prov#Plan",
+    "validationStatus": "shapes-only",
+    "shaclShapes": [
+      "ontology/shapes/sea-level.ttl"
+    ]
+  },
+  "ports": {
+    "inputs": [
+      [
+        "points",
+        "points"
+      ],
+      [
+        "projections",
+        "table"
+      ]
+    ],
+    "output": "table",
+    "optionalInputs": [],
+    "note": null
+  },
+  "ontology": {
+    "status": "declared",
+    "mappings": [
+      {
+        "role": "activity",
+        "iri": "https://digital-twin-ph.github.io/widget-pack-sea-level-rise/ns#SiteAssignment",
+        "file": "ontology/sea-level.ttl"
+      },
+      {
+        "role": "entity",
+        "iri": "https://digital-twin-ph.github.io/widget-pack-sea-level-rise/ns#ProjectionSite",
+        "file": "ontology/sea-level.ttl"
+      }
+    ],
+    "note": "Pack namespace only; mints no host term."
+  },
+  "implementation": {
+    "files": [],
+    "definition": "not implemented"
+  },
+  "compatibility": {
+    "workflowSchema": "fieldwork/workflow/1",
+    "versionPersistence": "not-yet-persisted",
+    "migrationFrom": [],
+    "replacementCandidate": null
+  },
+  "changes": [
+    {
+      "kind": "initial",
+      "description": "Assigns each point to a projection site and records the straight-line distance, which is part of the result rather than a detail: a projection at a site is not a value for an arbitrary point."
+    }
+  ],
+  "evidence": {
+    "status": "not-individually-certified",
+    "note": "No implementation exists. Distance would use the host haversine calculation; nearest-site assignment is not a statement that the projection applies at the point."
+  }
+}

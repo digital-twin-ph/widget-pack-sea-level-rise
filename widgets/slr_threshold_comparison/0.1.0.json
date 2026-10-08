@@ -1,0 +1,61 @@
+{
+  "schema": "fieldwork/widget-release/1",
+  "id": "urn:fieldwork:pack:sea-level-rise:widget:slr_threshold_comparison",
+  "nodeType": "slr_threshold_comparison",
+  "version": "0.1.0",
+  "title": "Compare level to elevation",
+  "released": "2026-10-08",
+  "implementationStatus": "proposed",
+  "standardization": "pack",
+  "configuration": {
+    "typescriptFile": null,
+    "typescriptType": null,
+    "planClass": "http://www.w3.org/ns/prov#Plan",
+    "validationStatus": "shapes-only",
+    "shaclShapes": [
+      "ontology/shapes/sea-level.ttl"
+    ]
+  },
+  "ports": {
+    "inputs": [
+      [
+        "assignments",
+        "table"
+      ]
+    ],
+    "output": "decisions",
+    "optionalInputs": [],
+    "note": "Output reuses the host decisions port so existing Map, Table and Chart widgets present it unchanged."
+  },
+  "ontology": {
+    "status": "declared",
+    "mappings": [
+      {
+        "role": "activity",
+        "iri": "https://digital-twin-ph.github.io/widget-pack-sea-level-rise/ns#ThresholdComparison",
+        "file": "ontology/sea-level.ttl"
+      }
+    ],
+    "note": "Pack namespace only; mints no host term."
+  },
+  "implementation": {
+    "files": [],
+    "definition": "not implemented"
+  },
+  "compatibility": {
+    "workflowSchema": "fieldwork/workflow/1",
+    "versionPersistence": "not-yet-persisted",
+    "migrationFrom": [],
+    "replacementCandidate": null
+  },
+  "changes": [
+    {
+      "kind": "initial",
+      "description": "Compares a projected level against a practitioner-supplied elevation on a stated vertical datum, and classifies the result. A comparison of two numbers, not an inundation model."
+    }
+  ],
+  "evidence": {
+    "status": "not-individually-certified",
+    "note": "No implementation exists. Accounts for no hydrodynamics, defences, drainage or waves. Refuses to run without a stated vertical datum, and refuses connection to a raster output, which would render something resembling a flood map."
+  }
+}

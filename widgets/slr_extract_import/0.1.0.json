@@ -1,0 +1,61 @@
+{
+  "schema": "fieldwork/widget-release/1",
+  "id": "urn:fieldwork:pack:sea-level-rise:widget:slr_extract_import",
+  "nodeType": "slr_extract_import",
+  "version": "0.1.0",
+  "title": "Sea-level projection extract",
+  "released": "2026-10-08",
+  "implementationStatus": "blocked",
+  "standardization": "pack",
+  "configuration": {
+    "typescriptFile": null,
+    "typescriptType": null,
+    "planClass": "http://www.w3.org/ns/prov#Plan",
+    "validationStatus": "shapes-only",
+    "shaclShapes": [
+      "ontology/shapes/sea-level.ttl"
+    ]
+  },
+  "ports": {
+    "inputs": [],
+    "output": "table",
+    "optionalInputs": [],
+    "note": "Requires a host tabular port type; PortType is a closed union and a pack cannot extend it."
+  },
+  "ontology": {
+    "status": "declared",
+    "mappings": [
+      {
+        "role": "entity",
+        "iri": "https://digital-twin-ph.github.io/widget-pack-sea-level-rise/ns#ProjectionExtract",
+        "file": "ontology/sea-level.ttl"
+      },
+      {
+        "role": "entity",
+        "iri": "https://digital-twin-ph.github.io/widget-pack-sea-level-rise/ns#ProjectionValue",
+        "file": "ontology/sea-level.ttl"
+      }
+    ],
+    "note": "Pack namespace only; mints no host term."
+  },
+  "implementation": {
+    "files": [],
+    "definition": "not implemented"
+  },
+  "compatibility": {
+    "workflowSchema": "fieldwork/workflow/1",
+    "versionPersistence": "not-yet-persisted",
+    "migrationFrom": [],
+    "replacementCandidate": null
+  },
+  "changes": [
+    {
+      "kind": "initial",
+      "description": "Imports a long-format CSV extract of published AR6 projections, keyed by site, scenario, workflow, dataset family, year and quantile. Records the dataset DOI, version, selection, extracting code and digest. Imports; does not acquire."
+    }
+  ],
+  "evidence": {
+    "status": "not-individually-certified",
+    "note": "No implementation exists. Blocked on a host tabular port: a projection has many rows per site, so flattening it to points would lose the key."
+  }
+}

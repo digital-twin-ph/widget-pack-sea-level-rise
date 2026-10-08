@@ -1,0 +1,10 @@
+This pack redistributes data derived from the IPCC AR6 Sea Level Projections,
+licensed CC BY 4.0 by the authors. See pack.json "dataSources" for the three
+citations the licence requires, the dataset DOI and its version.
+
+examples/manila-coastal-exposure/projection-sites-ph.csv is a 228-row subset of
+location_list.txt from Rutgers-ESSP/IPCC-AR6-Sea-Level-Projections, redistributed
+under the same terms.
+
+The pack's own code, vocabulary and documentation are licensed Apache-2.0.
+No projection values are redistributed: none have been extracted.
