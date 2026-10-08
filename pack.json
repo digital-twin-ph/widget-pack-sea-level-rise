@@ -13,32 +13,122 @@
     "hostCapabilities": [
       {
         "capability": "tabular-import",
-        "status": "missing",
-        "note": "A projection is keyed by site, scenario, workflow, year and quantile, with many rows per site. The host imports points, rasters and graphs only, and PortType is a closed union, so this pack cannot be admitted until the host adds a tabular port and importer. See fieldwork docs/experiments/47-sea-level-pack.md."
+        "status": "present",
+        "note": "Satisfied by the host's table_input widget 0.1.0 (urn:fieldwork:widget:table_input), which imports a long-format CSV keyed by declared columns and emits fw:DataTable with a stated or unstated unit, and by table_output 0.4.0 in its table mode. The host's key tuple must be unique, which an extract keyed by site, scenario, workflow, family, year and quantile satisfies. Present in fieldwork main as unreleased work; a released host version is not yet claimed. See fieldwork docs/experiments/48-tabular-input.md.",
+        "hostWidgets": [
+          "urn:fieldwork:widget:table_input@0.1.0",
+          "urn:fieldwork:widget:table_output@0.4.0"
+        ]
       }
     ],
     "baseWidgets": [
-      {"widget": "urn:fieldwork:widget:observations", "accepts": ">=0.2.0", "use": "facility and settlement points"},
-      {"widget": "urn:fieldwork:widget:area", "accepts": ">=0.1.0", "use": "coastal study area"},
-      {"widget": "urn:fieldwork:widget:map_output", "accepts": ">=0.8.0", "use": "presentation"},
-      {"widget": "urn:fieldwork:widget:table_output", "accepts": ">=0.3.0", "use": "presentation"},
-      {"widget": "urn:fieldwork:widget:chart_output", "accepts": ">=0.3.0", "use": "presentation"}
-    ]
+      {
+        "widget": "urn:fieldwork:widget:observations",
+        "accepts": ">=0.2.0",
+        "use": "facility and settlement points"
+      },
+      {
+        "widget": "urn:fieldwork:widget:area",
+        "accepts": ">=0.1.0",
+        "use": "coastal study area"
+      },
+      {
+        "widget": "urn:fieldwork:widget:map_output",
+        "accepts": ">=0.8.0",
+        "use": "presentation"
+      },
+      {
+        "widget": "urn:fieldwork:widget:table_output",
+        "accepts": ">=0.3.0",
+        "use": "presentation"
+      },
+      {
+        "widget": "urn:fieldwork:widget:chart_output",
+        "accepts": ">=0.3.0",
+        "use": "presentation"
+      }
+    ],
+    "keyFields": {
+      "note": "An extract that will be joined to Philippine administrative boundaries must key on the official PSGC code, not a place name: names repeat across provinces and a name-keyed join matches the wrong polygon without failing. The boundary vintage the codes came from is recorded in provenance, because PSGC codes are renumbered when units are reclassified.",
+      "required": [
+        "site_id",
+        "scenario",
+        "workflow",
+        "family",
+        "year",
+        "quantile"
+      ],
+      "forAdministrativeJoin": [
+        "psgc_code"
+      ],
+      "boundarySources": [
+        {
+          "source": "geoBoundaries",
+          "licence": "CC BY 4.0",
+          "redistributable": true
+        },
+        {
+          "source": "OCHA COD-AB (HDX)",
+          "licence": "open, PSA/NAMRIA-derived",
+          "redistributable": true
+        },
+        {
+          "source": "GADM",
+          "licence": "non-commercial, redistribution prohibited",
+          "redistributable": false,
+          "note": "Excluded as a pack dependency: a pack publishes its data, which its licence forbids. Usable only for a practitioner\u2019s own local exploration."
+        }
+      ]
+    }
   },
   "stages": {
-    "discovery": {"supplies": false, "status": "excluded", "note": "Out of scope by decision: the practitioner has already obtained the dataset. Which workflow, scenario and dataset family they chose is recorded on import, not chosen here."},
-    "acquisition": {"supplies": false, "status": "excluded", "note": "Impossible in a browser for this data. The tide-gauge sample store alone is 38.42 GB of zarr and the summary files are NetCDF."},
-    "extraction": {"supplies": true, "status": "external", "note": "scripts/extract-projection.py, run outside the application where xarray can read NetCDF. Writes a long-format CSV and a provenance record."},
-    "import": {"supplies": true, "status": "blocked", "note": "slr_extract_import. Blocked on the host tabular port."},
-    "application": {"supplies": true, "status": "proposed", "note": "slr_site_assignment and slr_threshold_comparison. Both are consumers of published projections, never producers."},
-    "presentation": {"supplies": false, "status": "reuses-base", "note": "Map, Table and Chart unchanged."}
+    "discovery": {
+      "supplies": false,
+      "status": "excluded",
+      "note": "Out of scope by decision: the practitioner has already obtained the dataset. Which workflow, scenario and dataset family they chose is recorded on import, not chosen here."
+    },
+    "acquisition": {
+      "supplies": false,
+      "status": "excluded",
+      "note": "Impossible in a browser for this data. The tide-gauge sample store alone is 38.42 GB of zarr and the summary files are NetCDF."
+    },
+    "extraction": {
+      "supplies": true,
+      "status": "external",
+      "note": "scripts/extract-projection.py, run outside the application where xarray can read NetCDF. Writes a long-format CSV and a provenance record."
+    },
+    "import": {
+      "supplies": true,
+      "status": "proposed",
+      "note": "slr_extract_import, reading the long-format CSV written by the extraction script. The host tabular port now exists, so this stage is no longer blocked; it is proposed and unreviewed."
+    },
+    "application": {
+      "supplies": true,
+      "status": "proposed",
+      "note": "slr_site_assignment and slr_threshold_comparison. Both are consumers of published projections, never producers."
+    },
+    "presentation": {
+      "supplies": false,
+      "status": "reuses-base",
+      "note": "Map, Table and Chart unchanged."
+    }
   },
   "contents": {
-    "vocabulary": ["ontology/sea-level.ttl"],
-    "shapes": ["ontology/shapes/sea-level.ttl"],
+    "vocabulary": [
+      "ontology/sea-level.ttl"
+    ],
+    "shapes": [
+      "ontology/shapes/sea-level.ttl"
+    ],
     "rules": [],
-    "widgets": ["widgets/slr_extract_import/0.1.0.json", "widgets/slr_site_assignment/0.1.0.json", "widgets/slr_threshold_comparison/0.1.0.json"],
-    "examples": ["examples/manila-coastal-exposure"]
+    "widgets": [
+      "widgets/slr_extract_import/0.1.0.json",
+      "widgets/slr_site_assignment/0.1.0.json",
+      "widgets/slr_threshold_comparison/0.1.0.json"
+    ],
+    "examples": [
+      "examples/manila-coastal-exposure"
+    ]
   },
   "runtimeFetching": "none",
   "dataSources": [
