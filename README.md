@@ -11,7 +11,19 @@ widget contracts, documentation and one extraction script that runs outside the
 browser. There is no executable widget code, so admitting this pack adds no
 execution surface to the application.
 
-## Status: proposed, and not yet reviewed
+## Status: implemented in the host, and not yet reviewed
+
+> **2026-10-09.** Fieldwork now implements all three of this pack's widget contracts natively:
+> `slr_extract_import`, `slr_site_assignment` and `slr_threshold_comparison`. The application loads
+> no pack and this pack ships no code, so a specification is implemented by the thing that can
+> execute it. This pack remains the source of the vocabulary, the SHACL shapes and the worked
+> example, and the host vendors the two TTL files at the digests the curated catalog pins. The three
+> contract deviations — a table input for the extract, three inputs for site assignment, and the
+> decisions output — are argued in
+> [experiment 58](https://github.com/digital-twin-ph/fieldwork/blob/main/docs/experiments/58-sea-level-widgets.md).
+> Admission here still turns on the three reviews, which have not run.
+
+## Original status: proposed, and not yet reviewed
 
 An AR6 projection is a table keyed by site, scenario, workflow, dataset family,
 year and quantile, with many rows per site. Fieldwork imported points, rasters and
