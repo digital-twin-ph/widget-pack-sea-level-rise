@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "namespace": "https://digital-twin-ph.github.io/widget-pack-sea-level-rise/ns#",
   "kind": "declaration-only",
-  "status": "proposed",
+  "status": "implemented-in-host",
   "summary": "Applies published IPCC AR6 relative sea-level projections to coastal point data. Consumes projections; does not produce them.",
   "requires": {
     "host": "fieldwork",
@@ -14,7 +14,7 @@
       {
         "capability": "tabular-import",
         "status": "present",
-        "note": "Satisfied by the host's table_input widget 0.1.0 (urn:fieldwork:widget:table_input), which imports a long-format CSV keyed by declared columns and emits fw:DataTable with a stated or unstated unit, and by table_output 0.4.0 in its table mode. The host's key tuple must be unique, which an extract keyed by site, scenario, workflow, family, year and quantile satisfies. Present in fieldwork main as unreleased work; a released host version is not yet claimed. See fieldwork docs/experiments/48-tabular-input.md.",
+        "note": "Satisfied by the host's table_input widget 0.1.0 (urn:fieldwork:widget:table_input), which imports a long-format CSV keyed by declared columns and emits fw:DataTable with a stated or unstated unit, and by table_output 0.4.0 in its table mode. The host's key tuple must be unique, which an extract keyed by site, scenario, workflow, family, year and quantile satisfies. Present in fieldwork main as unreleased work; a released host version is not yet claimed. See fieldwork docs/experiments/48-tabular-input.md. The three widget contracts this pack declared are now implemented in the host, so the pack no longer declares widgets of its own.",
         "hostWidgets": [
           "urn:fieldwork:widget:table_input@0.1.0",
           "urn:fieldwork:widget:table_output@0.4.0"
@@ -99,13 +99,13 @@
     },
     "import": {
       "supplies": true,
-      "status": "proposed",
-      "note": "slr_extract_import, reading the long-format CSV written by the extraction script. The host tabular port now exists, so this stage is no longer blocked; it is proposed and unreviewed."
+      "status": "implemented-in-host",
+      "note": "The host's Tabular data widget reads the long-format CSV and slr_extract_import declares it as a bounded extract. The pack's own import contract is superseded."
     },
     "application": {
-      "supplies": true,
-      "status": "proposed",
-      "note": "slr_site_assignment and slr_threshold_comparison. Both are consumers of published projections, never producers."
+      "supplies": false,
+      "status": "implemented-in-host",
+      "note": "The host implements these three contracts natively as urn:fieldwork:widget:slr_extract_import, slr_site_assignment and slr_threshold_comparison, because the application loads no pack and this pack ships no code. This pack remains the source of the vocabulary, the shapes and the worked example; the host vendors the two TTL files at the digests the curated catalog pins. See fieldwork docs/experiments/58-sea-level-widgets.md."
     },
     "presentation": {
       "supplies": false,
@@ -121,13 +121,13 @@
       "ontology/shapes/sea-level.ttl"
     ],
     "rules": [],
-    "widgets": [
+    "examples": [
+      "examples/manila-coastal-exposure"
+    ],
+    "retiredWidgets": [
       "widgets/slr_extract_import/0.1.0.json",
       "widgets/slr_site_assignment/0.1.0.json",
       "widgets/slr_threshold_comparison/0.1.0.json"
-    ],
-    "examples": [
-      "examples/manila-coastal-exposure"
     ]
   },
   "runtimeFetching": "none",
@@ -150,5 +150,25 @@
       "licence": "CC-BY-4.0",
       "note": "228 Philippine rows redistributed as examples/manila-coastal-exposure/projection-sites-ph.csv; the published list has 66,190 rows."
     }
-  ]
+  ],
+  "supersededWidgets": {
+    "note": "These contracts were declared here and are implemented in the host. They are listed for history: a pack that cannot ship code is a specification, and the thing that can execute it implements it. Deviations from the declared contracts are argued in fieldwork docs/experiments/58-sea-level-widgets.md.",
+    "widgets": [
+      {
+        "declared": "slr_extract_import",
+        "implementedAs": "urn:fieldwork:widget:slr_extract_import@0.1.0",
+        "deviation": "Takes a table input rather than importing the CSV itself: the host already has a tabular importer, and a second reader of the same file would be a second place for the contract to drift."
+      },
+      {
+        "declared": "slr_site_assignment",
+        "implementedAs": "urn:fieldwork:widget:slr_site_assignment@0.1.0",
+        "deviation": "Three inputs rather than two. A table has no geometry in the host (fw:DataTable is disjoint from fw:PointDataset), so the published sites arrive as a point layer rather than inside the projections table. The output is a table of distances, so the join can be displayed."
+      },
+      {
+        "declared": "slr_threshold_comparison",
+        "implementedAs": "urn:fieldwork:widget:slr_threshold_comparison@0.1.0",
+        "deviation": "None of substance. Refuses a missing datum, a missing elevation attribute and a partial key, as declared, and outputs the host decisions port so it cannot reach a raster output."
+      }
+    ]
+  }
 }
