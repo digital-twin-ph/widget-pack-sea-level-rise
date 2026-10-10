@@ -2,7 +2,7 @@
   "schema": "fieldwork/widget-pack/1",
   "id": "urn:fieldwork:pack:sea-level-rise",
   "name": "Sea-level rise (IPCC AR6)",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "namespace": "https://digital-twin-ph.github.io/widget-pack-sea-level-rise/ns#",
   "kind": "declaration-only",
   "status": "implemented-in-host",
@@ -53,7 +53,7 @@
       "required": [
         "site_id",
         "scenario",
-        "workflow",
+        "basis",
         "family",
         "year",
         "quantile"
@@ -78,7 +78,17 @@
           "redistributable": false,
           "note": "Excluded as a pack dependency: a pack publishes its data, which its licence forbids. Usable only for a practitioner\u2019s own local exploration."
         }
-      ]
+      ],
+      "basis": {
+        "column": "basis",
+        "declaredBy": "basisKind",
+        "kinds": {
+          "workflow": "the value came from one published workflow, such as wf_1e",
+          "confidence-pbox": "the value was read from a confidence output file, which is a p-box combining workflow p-boxes"
+        },
+        "note": "Measured 2026-10-09 from total_ssp245_medium_confidence_values.nc: the confidence output files carry no workflow dimension, and their source attribute names the workflow p-boxes they combine. A key component assuming one workflow could not describe them, so the identifier and the kind of identifier are declared separately. A p-box bound is not a quantile of one distribution and the two kinds are not interchangeable.",
+        "supersedes": "workflow"
+      }
     }
   },
   "stages": {
@@ -142,7 +152,23 @@
         "Fox-Kemper, B., et al. 2021: Ocean, Cryosphere and Sea Level Change. In Climate Change 2021: The Physical Science Basis. IPCC AR6 WG1, Chapter 9. doi:10.1017/9781009157896.011",
         "Kopp, R. E., Garner, G. G., et al. 2023. The Framework for Assessing Changes To Sea-Level (FACTS) v1.0. Geoscientific Model Development 16, 7461-7489. doi:10.5194/gmd-16-7461-2023",
         "Garner, G. G., et al. 2021. IPCC AR6 Sea Level Projections. Version 20210809. doi:10.5281/zenodo.5914709"
-      ]
+      ],
+      "measured": {
+        "date": "2026-10-09",
+        "file": "ar6-regional-confidence.zip -> medium_confidence/ssp245/total_ssp245_medium_confidence_values.nc",
+        "variable": "sea_level_change",
+        "dtype": "int16",
+        "units": "mm",
+        "scaleFactor": 1.0,
+        "fillValue": -32768,
+        "conventions": null,
+        "dimensions": {
+          "quantiles": 107,
+          "years": 14,
+          "locations": 66190
+        },
+        "note": "Read for the first time on this date. Values are millimetres, not metres. No attribute carries the baseline period; it is stated from AR6 WG1 Chapter 9 documentation. The file declares no Conventions, so CF semantics cannot be assumed."
+      }
     },
     {
       "name": "IPCC AR6 projection site list",

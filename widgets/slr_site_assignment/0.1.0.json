@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "title": "Assign projection site",
   "released": "2026-10-08",
-  "implementationStatus": "proposed",
+  "implementationStatus": "retired",
   "standardization": "pack",
   "configuration": {
     "typescriptFile": null,
@@ -49,7 +49,7 @@
   },
   "implementation": {
     "files": [],
-    "definition": "not implemented"
+    "definition": "implemented in the host; see supersededBy"
   },
   "compatibility": {
     "workflowSchema": "fieldwork/workflow/1",
@@ -65,6 +65,14 @@
   ],
   "evidence": {
     "status": "not-individually-certified",
-    "note": "No implementation exists. Distance would use the host haversine calculation; nearest-site assignment is not a statement that the projection applies at the point."
+    "note": "No implementation exists in this pack and none is intended. The contract is implemented in the host, whose own release carries its evidence. Distance would use the host haversine calculation; nearest-site assignment is not a statement that the projection applies at the point."
+  },
+  "supersededBy": {
+    "implementedAs": "urn:fieldwork:widget:slr_site_assignment@0.1.0",
+    "host": "fieldwork",
+    "reason": "A pack that ships no executable code is a specification; the host implements it. Retired here so no node type has two definitions.",
+    "deviation": "Three inputs rather than two. A table has no geometry in the host (fw:DataTable is disjoint from fw:PointDataset), so the published sites arrive as a point layer rather than inside the projections table. The output is a table of distances, so the join can be displayed.",
+    "argument": "fieldwork docs/experiments/58-sea-level-widgets.md",
+    "retired": "2026-10-09"
   }
 }

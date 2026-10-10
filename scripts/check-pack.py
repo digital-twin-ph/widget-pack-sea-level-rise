@@ -33,11 +33,27 @@ for ttl in pack['contents']['vocabulary']+pack['contents']['shapes']:
     text=Path(ttl).read_text()
     if 'owl:imports' in text: problems.append(f'{ttl} declares owl:imports, which would fetch at run time')
 
-for path in pack['contents']['widgets']:
+# Widget declarations may be live or retired; a pack that ships no code retires them and the
+# host implements the contracts. Both are checked the same way, and a missing key is a failure
+# rather than a crash: the validator is part of the contract it checks.
+widget_keys=[k for k in ('widgets','retiredWidgets') if k in pack['contents']]
+if not widget_keys:
+    problems.append("pack.json contents declares neither 'widgets' nor 'retiredWidgets'")
+widget_paths=[p for k in widget_keys for p in pack['contents'][k]]
+for path in widget_paths:
+    if not Path(path).exists():
+        problems.append(f'{path} is declared in contents but missing'); continue
     w=json.loads(Path(path).read_text())
     if w.get('standardization')!='pack': problems.append(f'{path} is not marked as pack standardization')
     for m in w.get('ontology',{}).get('mappings',[]):
         if m['iri'].startswith(HOST_NS): problems.append(f'{path} maps a host IRI: {m["iri"]}')
+    # A retired declaration must say so, or a reader cannot tell it from a live contract.
+    if 'retiredWidgets' in widget_keys and path in pack['contents'].get('retiredWidgets',[]):
+        if w.get('implementationStatus')!='retired':
+            problems.append(f'{path} is listed as retired but declares implementationStatus '
+                            f'{w.get("implementationStatus")!r}')
+        if not w.get('supersededBy'):
+            problems.append(f'{path} is retired but names no supersededBy')
 
 # Bundled data must be attributed and, where the licence requires it, cited.
 for source in pack['dataSources']:
@@ -48,7 +64,9 @@ if 'CC-BY-4.0' in json.dumps(pack['dataSources']) and len(
 
 print(f'pack {pack["id"]} {pack["version"]}')
 print(f'  stages: ' + ', '.join(f'{k}={v["status"]}' for k,v in pack['stages'].items()))
-print(f'  vocabulary: {len(pack["contents"]["vocabulary"])} file(s), shapes: {len(pack["contents"]["shapes"])}, widgets: {len(pack["contents"]["widgets"])}')
+print(f'  vocabulary: {len(pack["contents"]["vocabulary"])} file(s), shapes: '
+      f'{len(pack["contents"]["shapes"])}, widget declarations: {len(widget_paths)} '
+      f'({", ".join(widget_keys)})')
 if problems:
     print('\nFAILED:'); [print('  -',p) for p in problems]; sys.exit(1)
 print('  self-checks passed')

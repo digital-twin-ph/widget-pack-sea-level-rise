@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "title": "Sea-level projection extract",
   "released": "2026-10-08",
-  "implementationStatus": "blocked",
+  "implementationStatus": "retired",
   "standardization": "pack",
   "configuration": {
     "typescriptFile": null,
@@ -20,7 +20,7 @@
     "inputs": [],
     "output": "table",
     "optionalInputs": [],
-    "note": "Requires a host tabular port type; PortType is a closed union and a pack cannot extend it."
+    "note": "Declared before the host had a tabular port. The host now provides one (table_input 0.1.0), and the implemented widget takes a table input."
   },
   "ontology": {
     "status": "declared",
@@ -40,7 +40,7 @@
   },
   "implementation": {
     "files": [],
-    "definition": "not implemented"
+    "definition": "implemented in the host; see supersededBy"
   },
   "compatibility": {
     "workflowSchema": "fieldwork/workflow/1",
@@ -56,6 +56,14 @@
   ],
   "evidence": {
     "status": "not-individually-certified",
-    "note": "No implementation exists. Blocked on a host tabular port: a projection has many rows per site, so flattening it to points would lose the key."
+    "note": "No implementation exists in this pack and none is intended. The contract is implemented in the host, whose own release carries its evidence. Blocked on a host tabular port: a projection has many rows per site, so flattening it to points would lose the key."
+  },
+  "supersededBy": {
+    "implementedAs": "urn:fieldwork:widget:slr_extract_import@0.1.0",
+    "host": "fieldwork",
+    "reason": "A pack that ships no executable code is a specification; the host implements it. Retired here so no node type has two definitions.",
+    "deviation": "Takes a table input rather than importing the CSV itself: the host already has a tabular importer, and a second reader of the same file would be a second place for the contract to drift.",
+    "argument": "fieldwork docs/experiments/58-sea-level-widgets.md",
+    "retired": "2026-10-09"
   }
 }

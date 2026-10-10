@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "title": "Compare level to elevation",
   "released": "2026-10-08",
-  "implementationStatus": "proposed",
+  "implementationStatus": "retired",
   "standardization": "pack",
   "configuration": {
     "typescriptFile": null,
@@ -40,7 +40,7 @@
   },
   "implementation": {
     "files": [],
-    "definition": "not implemented"
+    "definition": "implemented in the host; see supersededBy"
   },
   "compatibility": {
     "workflowSchema": "fieldwork/workflow/1",
@@ -56,6 +56,14 @@
   ],
   "evidence": {
     "status": "not-individually-certified",
-    "note": "No implementation exists. Accounts for no hydrodynamics, defences, drainage or waves. Refuses to run without a stated vertical datum, and refuses connection to a raster output, which would render something resembling a flood map."
+    "note": "No implementation exists in this pack and none is intended. The contract is implemented in the host, whose own release carries its evidence. Accounts for no hydrodynamics, defences, drainage or waves. Refuses to run without a stated vertical datum, and refuses connection to a raster output, which would render something resembling a flood map."
+  },
+  "supersededBy": {
+    "implementedAs": "urn:fieldwork:widget:slr_threshold_comparison@0.1.0",
+    "host": "fieldwork",
+    "reason": "A pack that ships no executable code is a specification; the host implements it. Retired here so no node type has two definitions.",
+    "deviation": "None of substance. Refuses a missing datum, a missing elevation attribute and a partial key, as declared, and outputs the host decisions port so it cannot reach a raster output.",
+    "argument": "fieldwork docs/experiments/58-sea-level-widgets.md",
+    "retired": "2026-10-09"
   }
 }
