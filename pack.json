@@ -105,7 +105,7 @@
     "extraction": {
       "supplies": true,
       "status": "external",
-      "note": "scripts/extract-projection.py, run outside the application where xarray can read NetCDF. Writes a long-format CSV and a provenance record."
+      "note": "scripts/extract-projection.py selects the sites, scenarios, years and quantiles a workflow needs and writes a long-format CSV with a provenance record. Run outside the application by decision: choosing the selection needs dataset-specific knowledge — which variable, which dimension order, which quantile index — and that belongs where a reader can see and re-run it. Not because a browser cannot read the data; it can, and stages.acquisition records the measurement. The validation lab's pinned Pyodide kernel carries netcdf4, xarray and zarr."
     },
     "import": {
       "supplies": true,
