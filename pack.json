@@ -99,8 +99,8 @@
     },
     "acquisition": {
       "supplies": false,
-      "status": "excluded",
-      "note": "Impossible in a browser for this data. The tide-gauge sample store alone is 38.42 GB of zarr and the summary files are NetCDF."
+      "status": "out-of-scope",
+      "note": "Out of scope by decision, not by impossibility. This previously read \"Impossible in a browser for this data\", which was measured to be wrong on 2026-10-10: Zenodo serves this record with access-control-allow-origin: * and honours Range requests, answering 206 with a Content-Range, and the summary file for one scenario and family is 71.7 MB deflated inside the 9.24 GB archive. A browser can read the zip central directory from a tail range and fetch that member alone. The size argument was also unsound in its own terms: a store's size is not the bytes a reader transfers, as reading 55,649 of 81,455,423 rows from 11 GB of Overture GeoParquet demonstrates. The Monte Carlo sample stores really are 38.42 GB and 1.65 TB, and their cross-origin reachability has not been measured. What stands is the decision: extraction needs dataset-specific knowledge — which variable, which dimension order, which quantile index — and that belongs where a reader can see and re-run it, not inside a widget. The pinned Pyodide kernel in the validation lab carries netcdf4 and zarr, so the extraction is reproducible there without installing anything."
     },
     "extraction": {
       "supplies": true,

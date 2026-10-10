@@ -57,7 +57,7 @@ PSGC codes are renumbered when units are reclassified.
 | Stage | This pack |
 | --- | --- |
 | Discovery | **Excluded.** The practitioner has already obtained the dataset; which workflow, scenario and family they chose is recorded on import |
-| Acquisition | **Excluded.** Impossible in a browser here: the tide-gauge sample store alone is 38.42 GB of zarr, and the summary files are NetCDF |
+| Acquisition | **Out of scope by decision.** Not impossible: measured 2026-10-10, Zenodo sends `access-control-allow-origin: *` and honours Range, and the summary file for one scenario and family is 71.7 MB inside the 9.24 GB archive, reachable by reading the zip central directory from a tail range. The earlier claim of impossibility confused a store's size with the bytes a reader transfers. Extraction stays external because it needs dataset-specific knowledge that belongs where a reader can re-run it. |
 | Extraction | **External.** `scripts/extract-projection.py`, run where xarray can read NetCDF |
 | Import | **Proposed.** `slr_extract_import`, reading the long-format CSV; the host tabular port now exists |
 | Application | **Proposed.** Site assignment and threshold comparison, both consumers |
